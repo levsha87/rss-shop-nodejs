@@ -2,15 +2,17 @@
 
 const products = [{
   title: "Canon",
-  model: "SX120IS",
-  price: "$80",
-  id: "1"
+  description: "SX120IS",
+  price: 80,
+  id: "1",
+  count: 5
 },
 {
   title: "Sony",
-  model: "X25",
-  price: "$45",
-  id: "2"
+  description: "X25",
+  price: 45,
+  id: "2",
+  count: 7
 }];
 
 module.exports.getProductsList = async (event) => {
