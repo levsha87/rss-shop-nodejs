@@ -20,9 +20,7 @@ module.exports.getProductsList = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(
-      products,
-      null,
-      2
+      products
     ),
   };
 };
@@ -36,9 +34,7 @@ module.exports.getProductsById = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify(
-      product,
-      null,
-      2
+      product
     ),
   };
 };
