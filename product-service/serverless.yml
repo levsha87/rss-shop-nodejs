@@ -10,18 +10,26 @@ provider:
   stackName: product-service-dev
   httpApi:
     cors: true
-
+    
 functions:
-  getProductsList:
-    handler: handler.getProductsList
-    events:
-      - httpApi:
-          method: get
-          path: /products
-
   getProductsById:
     handler: handler.getProductsById
     events:
       - httpApi:
           method: get
           path: /products/{id}
+
+  getProductsList:
+    handler: handler.getProductsList   
+    iamRoleStatementsInherit: true
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+        Resource: "arn:aws:dynamodb:eu-west-1:378686460370:table/Product_Catalog"
+    events:
+      - httpApi:
+          path: /products
+          method: get
