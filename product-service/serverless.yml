@@ -49,3 +49,10 @@ functions:
       - httpApi:
           path: /products
           method: get
+
+  createProduct:
+    handler: handler.createProduct
+    events:
+      - httpApi:
+          path: /products
+          method: post  
