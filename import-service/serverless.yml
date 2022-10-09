@@ -7,27 +7,23 @@ provider:
   runtime: nodejs14.x
   stage: dev
   region: eu-west-1
-  stackName: product-service-dev
+  stackName: import-service-dev
   httpApi:
     cors: true
 
-# you can add statements to the Lambda function's IAM Role here
-#  iam:
-#    role:
-#      statements:
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:ListBucket"
-#          Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#        - Effect: "Allow"
-#          Action:
-#            - "s3:PutObject"
-#          Resource:
-#            Fn::Join:
-#              - ""
-#              - - "arn:aws:s3:::"
-#                - "Ref" : "ServerlessDeploymentBucket"
-#                - "/*"
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:ListBucket"
+          Resource: 
+            - "arn:aws:s3:::uploaded-dcam-products"
+        - Effect: "Allow"
+          Action:
+            - "s3:*"
+          Resource:
+            - "arn:aws:s3:::uploaded-dcam-products/*"
 
 # you can define service wide environment variables here
 #  environment:
@@ -42,8 +38,13 @@ provider:
 #    - include-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  importProductsFile:
+    handler: handler.importProductsFile
+    events:
+      - httpApi:
+          method: get
+          path: /import/{name}
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
