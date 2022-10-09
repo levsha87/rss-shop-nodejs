@@ -1,7 +1,9 @@
-import { products } from "../products.js";
+import { getProductsList } from "./getProductsList.mjs";
 
 export const getProductsById = async (event) => {
+    const products = await getProductsList();
     const currentId = event.pathParameters.id;
+
     const [product] = products.filter((product) => {
       return product.id === currentId;
     });
