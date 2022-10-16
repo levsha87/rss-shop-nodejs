@@ -11,6 +11,10 @@ provider:
   httpApi:
     cors: true
 
+  environment:
+    SQS_URL:
+      Ref: SQSQueue
+
   iam:
     role:
       statements:
@@ -34,7 +38,14 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource: "arn:aws:dynamodb:eu-west-1:378686460370:table/Stocks"
-    
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+
 functions:
   getProductsById:
     handler: handler.getProductsById
@@ -56,3 +67,13 @@ functions:
       - httpApi:
           path: /products
           method: post 
+
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events: 
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn
