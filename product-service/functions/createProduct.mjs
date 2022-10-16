@@ -28,9 +28,8 @@ export const createProduct = async (event) => {
         Item: stocks,
       }).promise();
 
-    return {
+      return {
         statusCode: 201,
         body: JSON.stringify(product) + "\n" + JSON.stringify(stocks),
-    };
-
+      };
 }

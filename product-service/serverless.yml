@@ -55,4 +55,4 @@ functions:
     events:
       - httpApi:
           path: /products
-          method: post  
+          method: post 
