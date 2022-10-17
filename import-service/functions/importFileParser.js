@@ -19,6 +19,8 @@ export const importFileParser = async (event) => {
       .createReadStream()
       .pipe(csv())
       .on('data', (data) => {
+        console.log('tut', data);
+        console.log('tut', process.env.SQS_URL);
         sqs.sendMessage({
           QueueUrl: process.env.SQS_URL,
           MessageBody: data

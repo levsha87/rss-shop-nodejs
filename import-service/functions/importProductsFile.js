@@ -5,11 +5,11 @@ AWS.config.update({ region: 'eu-west-1' });
 export const importProductsFile = async (event) => {
     const s3 = new AWS.S3();
     const BUCKET = 'uploaded-dcam-products';
-    const fileName = event.pathParameters.name;
+    const { name } = event.queryStringParameters;
     
     const params = { 
         Bucket: BUCKET,
-        Key: `uploaded/${fileName}`,
+        Key: `uploaded/${name}`,
         Expires: 60,
         ContentType: 'text/csv'
      };
@@ -22,7 +22,6 @@ export const importProductsFile = async (event) => {
             statusCode: 200,
             headers: {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify(signedUrl)
         }

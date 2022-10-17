@@ -14,6 +14,8 @@ provider:
   environment:
     SQS_URL:
       Ref: SQSQueue
+    SNS_ARN:
+      Ref: SNSTopic
 
   iam:
     role:
@@ -38,6 +40,14 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource: "arn:aws:dynamodb:eu-west-1:378686460370:table/Stocks"
+        - Effect: "Allow"
+          Action: "sqs: *"
+          Resource: 
+            - Fn::GetAtt: [ SQSQueue, Arn ]
+        - Effect: "Allow"
+          Action: "sns: *"
+          Resource: 
+            Ref: SNSTopic
 
 resources:
   Resources:
@@ -45,6 +55,17 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: catalogItemsQueue
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: rm.levsha@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
 
 functions:
   getProductsById:
